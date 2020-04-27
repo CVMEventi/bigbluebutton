@@ -21,7 +21,7 @@ import LockNotifier from '/imports/ui/components/lock-viewers/notify/container';
 import PingPongContainer from '/imports/ui/components/ping-pong/container';
 import MediaService from '/imports/ui/components/media/service';
 import ManyWebcamsNotifier from '/imports/ui/components/video-provider/many-users-notify/container';
-import Banner from '/imports/ui/components/banner/component';
+import BrandingBanner from '/imports/ui/components/branding-banner/component';
 import { styles } from './styles';
 
 const MOBILE_MEDIA = 'only screen and (max-width: 40em)';
@@ -324,7 +324,7 @@ class App extends Component {
     } = this.props;
     return (
       <main className={styles.main}>
-        <Banner />
+        <BrandingBanner />
         {this.renderActivityCheck()}
         {this.renderUserInformation()}
         <BannerBarContainer />
