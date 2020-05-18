@@ -77,6 +77,7 @@ class ActionsBar extends PureComponent {
               <QuickVideoDropdown
                 {...{
                   currentSlidHasContent,
+                  intl,
                   amIPresenter,
                   parseCurrentSlideContent,
                 }}
