@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defineMessages, intlShape } from 'react-intl';
 import _ from 'lodash';
 import { makeCall } from '/imports/ui/services/api';
 import Button from '/imports/ui/components/button/component';
@@ -10,7 +11,15 @@ import DropdownList from '/imports/ui/components/dropdown/list/component';
 import DropdownListItem from '/imports/ui/components/dropdown/list/item/component';
 import { styles } from '../styles';
 
+const intlMessages = defineMessages({
+  startExternalVideoLabel: {
+    id: 'app.actionsBar.actionsDropdown.shareExternalVideo',
+    description: 'Start sharing external video button',
+  },
+});
+
 const propTypes = {
+  intl: intlShape.isRequired,
   parseCurrentSlideContent: PropTypes.func.isRequired,
   amIPresenter: PropTypes.bool.isRequired,
 };
@@ -28,7 +37,7 @@ const getAvailableVideoPolls = (slideId, parsedUrls) => parsedUrls.map(parsedUrl
 ));
 
 const QuickVideoDropdown = (props) => {
-  const { amIPresenter, parseCurrentSlideContent } = props;
+  const { amIPresenter, intl, parseCurrentSlideContent } = props;
   const parsedSlide = parseCurrentSlideContent();
 
   const { slideId, videoUrls } = parsedSlide;
@@ -37,13 +46,13 @@ const QuickVideoDropdown = (props) => {
     <Dropdown>
       <DropdownTrigger tabIndex={0}>
         <Button
-          aria-label="Video nella slide"
+          aria-label={intl.formatMessage(intlMessages.startExternalVideoLabel)}
           circle
           className={styles.button}
           color="primary"
           hideLabel
           icon="video"
-          label="Video nella slide"
+          label={intl.formatMessage(intlMessages.startExternalVideoLabel)}
           onClick={() => null}
           size="lg"
         />
