@@ -12,6 +12,7 @@ import Button from '../button/component';
 import RecordingIndicator from './recording-indicator/container';
 import TalkingIndicatorContainer from '/imports/ui/components/nav-bar/talking-indicator/container';
 import SettingsDropdownContainer from './settings-dropdown/container';
+import SlidesCounterContainer from './slides-counter/container';
 
 
 const intlMessages = defineMessages({
@@ -115,6 +116,7 @@ class NavBar extends PureComponent {
           <div className={styles.center}>
             <h1 className={styles.presentationTitle}>{presentationTitle}</h1>
 
+            <SlidesCounterContainer />
             <RecordingIndicator
               mountModal={mountModal}
               amIModerator={amIModerator}
