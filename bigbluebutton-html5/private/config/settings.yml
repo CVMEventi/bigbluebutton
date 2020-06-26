@@ -21,10 +21,13 @@ public:
     enableNetworkInformation: false
     enableLimitOfViewersInWebcam: false
     enableTalkingIndicator: true
+    mirrorOwnWebcam: false
     viewersInWebcam: 8
     ipv4FallbackDomain: ""
     allowLogout: true
     allowFullscreen: true
+    remainingTimeThreshold: 30
+    remainingTimeAlertThreshold: 1
     defaultSettings:
       application:
         animations: true
