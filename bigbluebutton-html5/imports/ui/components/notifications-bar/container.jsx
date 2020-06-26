@@ -196,7 +196,7 @@ export default injectIntl(withTracker(({ intl }) => {
           messageDuration={intlMessages.breakoutTimeRemaining}
           timeEndedMessage={intlMessages.breakoutWillClose}
           alertMessage={
-            intl.formatMessage(msg, {0: REMAINING_TIME_ALERT_THRESHOLD})
+            intl.formatMessage(msg, { 0: REMAINING_TIME_ALERT_THRESHOLD })
           }
           alertUnderMinutes={REMAINING_TIME_ALERT_THRESHOLD}
         />
@@ -222,7 +222,7 @@ export default injectIntl(withTracker(({ intl }) => {
           messageDuration={intlMessages.meetingTimeRemaining}
           timeEndedMessage={intlMessages.meetingWillClose}
           alertMessage={
-            intl.formatMessage(msg, {0: REMAINING_TIME_ALERT_THRESHOLD})
+            intl.formatMessage(msg, { 0: REMAINING_TIME_ALERT_THRESHOLD })
           }
           alertUnderMinutes={REMAINING_TIME_ALERT_THRESHOLD}
         />
