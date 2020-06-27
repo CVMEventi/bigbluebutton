@@ -16,12 +16,18 @@ const intlMessages = defineMessages({
     id: 'app.actionsBar.actionsDropdown.shareExternalVideo',
     description: 'Start sharing external video button',
   },
+  stopExternalVideoLabel: {
+    id: 'app.actionsBar.actionsDropdown.stopShareExternalVideo',
+    description: 'Stop sharing external video button',
+  },
 });
 
 const propTypes = {
   intl: intlShape.isRequired,
   parseCurrentSlideContent: PropTypes.func.isRequired,
   amIPresenter: PropTypes.bool.isRequired,
+  isSharingVideo: PropTypes.bool.isRequired,
+  stopExternalVideoShare: PropTypes.func.isRequired,
 };
 
 const handleClickQuickVideo = (videoUrl) => {
@@ -37,10 +43,28 @@ const getAvailableVideoPolls = (slideId, parsedUrls) => parsedUrls.map(parsedUrl
 ));
 
 const QuickVideoDropdown = (props) => {
-  const { amIPresenter, intl, parseCurrentSlideContent } = props;
+  const {
+    amIPresenter, intl, parseCurrentSlideContent, isSharingVideo, stopExternalVideoShare,
+  } = props;
   const parsedSlide = parseCurrentSlideContent();
 
   const { slideId, videoUrls } = parsedSlide;
+
+  if (amIPresenter && isSharingVideo) {
+    return (
+      <Button
+        aria-label={intl.formatMessage(intlMessages.stopExternalVideoLabel)}
+        circle
+        className={styles.button}
+        color="danger"
+        hideLabel
+        icon="video"
+        label={intl.formatMessage(intlMessages.stopExternalVideoLabel)}
+        onClick={stopExternalVideoShare}
+        size="lg"
+      />
+    );
+  }
 
   return amIPresenter && videoUrls && videoUrls.length ? (
     <Dropdown>

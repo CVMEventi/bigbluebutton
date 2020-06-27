@@ -80,6 +80,8 @@ class ActionsBar extends PureComponent {
                   intl,
                   amIPresenter,
                   parseCurrentSlideContent,
+                  isSharingVideo,
+                  stopExternalVideoShare,
                 }}
               />
             ) : null
