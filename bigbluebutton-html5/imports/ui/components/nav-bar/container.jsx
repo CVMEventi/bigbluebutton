@@ -51,6 +51,7 @@ export default withTracker(() => {
   const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { role: 1 } });
   const openPanel = Session.get('openPanel');
   const isExpanded = openPanel !== '';
+  const streaming = Session.get('streaming');
   const amIModerator = currentUser.role === ROLE_MODERATOR;
   const hasUnreadMessages = checkUnreadMessages();
 
@@ -63,5 +64,6 @@ export default withTracker(() => {
     meetingId,
     presentationTitle: meetingTitle,
     hasUnreadMessages,
+    streaming,
   };
 })(NavBarContainer);

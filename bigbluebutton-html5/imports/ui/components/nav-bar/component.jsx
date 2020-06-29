@@ -78,7 +78,7 @@ class NavBar extends PureComponent {
       shortcuts: TOGGLE_USERLIST_AK,
       mountModal,
       presentationTitle,
-      amIModerator,
+      amIModerator
     } = this.props;
 
 

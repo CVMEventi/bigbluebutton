@@ -362,6 +362,8 @@ const BaseContainer = withTracker(() => {
     Session.set('openPanel', '');
   }
 
+  Session.set('streaming', '');
+
   const codeError = Session.get('codeError');
 
   return {

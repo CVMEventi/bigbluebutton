@@ -22,6 +22,8 @@ import PingPongContainer from '/imports/ui/components/ping-pong/container';
 import MediaService from '/imports/ui/components/media/service';
 import ManyWebcamsNotifier from '/imports/ui/components/video-provider/many-users-notify/container';
 import BrandingBanner from '/imports/ui/components/branding-banner/component';
+import { withModalMounter } from '/imports/ui/components/modal/service';
+import StreamingContainer from '/imports/ui/components/streaming/container';
 import { styles } from './styles';
 
 const MOBILE_MEDIA = 'only screen and (max-width: 40em)';
@@ -29,6 +31,8 @@ const APP_CONFIG = Meteor.settings.public.app;
 const DESKTOP_FONT_SIZE = APP_CONFIG.desktopFontSize;
 const MOBILE_FONT_SIZE = APP_CONFIG.mobileFontSize;
 const ENABLE_NETWORK_MONITORING = Meteor.settings.public.networkMonitoring.enableNetworkMonitoring;
+
+const BODY = document.getElementsByTagName('body')[0];
 
 const intlMessages = defineMessages({
   userListLabel: {
@@ -151,7 +155,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      meetingMuted, notify, currentUserEmoji, intl, hasPublishedPoll,
+      meetingMuted, notify, currentUserEmoji, intl, hasPublishedPoll, streaming
     } = this.props;
 
     if (prevProps.currentUserEmoji.status !== currentUserEmoji.status) {
@@ -183,6 +187,12 @@ class App extends Component {
         intl.formatMessage(intlMessages.pollPublishedLabel), 'info', 'polling',
       );
     }
+
+    if (streaming === 'chromaKey') {
+      BODY.style.backgroundColor = "#64C864";
+    } else {
+      BODY.style.backgroundColor = null;
+    }
   }
 
   componentWillUnmount() {
@@ -202,13 +212,13 @@ class App extends Component {
   }
 
   shouldAriaHide() {
-    const { openPanel, isPhone } = this.props;
+    const { openPanel, isPhone, streaming } = this.props;
     return openPanel !== '' && (isPhone || isLayeredView.matches);
   }
 
   renderPanel() {
     const { enableResize } = this.state;
-    const { openPanel, isRTL } = this.props;
+    const { openPanel, isRTL, streaming } = this.props;
 
     return (
       <PanelManager
@@ -216,6 +226,7 @@ class App extends Component {
           openPanel,
           enableResize,
           isRTL,
+          streaming,
         }}
         shouldAriaHide={this.shouldAriaHide}
       />
@@ -223,9 +234,10 @@ class App extends Component {
   }
 
   renderNavBar() {
-    const { navbar } = this.props;
+    const { navbar, streaming } = this.props;
 
     if (!navbar) return null;
+    if (streaming !== '') return null;
 
     return (
       <header className={styles.navbar}>
@@ -282,9 +294,10 @@ class App extends Component {
     const {
       actionsbar,
       intl,
+      streaming,
     } = this.props;
 
-    if (!actionsbar) return null;
+    if (!actionsbar || streaming !== '') return null;
 
     return (
       <section
@@ -322,7 +335,7 @@ class App extends Component {
 
   render() {
     const {
-      customStyle, customStyleUrl, openPanel,
+      customStyle, customStyleUrl, openPanel, mountModal
     } = this.props;
     return (
       <main className={styles.main}>
@@ -352,6 +365,7 @@ class App extends Component {
         <ManyWebcamsNotifier />
         {customStyleUrl ? <link rel="stylesheet" type="text/css" href={customStyleUrl} /> : null}
         {customStyle ? <link rel="stylesheet" type="text/css" href={`data:text/css;charset=UTF-8,${encodeURIComponent(customStyle)}`} /> : null}
+        <button style={{display: 'none'}} accessKey="S" onClick={() => mountModal(<StreamingContainer />)}></button>
       </main>
     );
   }
@@ -360,4 +374,4 @@ class App extends Component {
 App.propTypes = propTypes;
 App.defaultProps = defaultProps;
 
-export default injectIntl(App);
+export default withModalMounter(injectIntl(App));

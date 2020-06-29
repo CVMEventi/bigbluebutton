@@ -158,7 +158,7 @@ class VideoListItem extends Component {
   }
 
   renderFullscreenButton() {
-    const { user } = this.props;
+    const { user, streaming } = this.props;
     const { isFullscreen } = this.state;
 
     if (!ALLOW_FULLSCREEN) return null;
@@ -169,6 +169,7 @@ class VideoListItem extends Component {
         elementName={user.name}
         isFullscreen={isFullscreen}
         dark
+        hidden={streaming !== ''}
       />
     );
   }

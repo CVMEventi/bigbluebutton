@@ -9,6 +9,7 @@ import { withDraggableContext } from './context';
 import VideoProviderContainer from '/imports/ui/components/video-provider/container';
 import { styles } from '../styles.scss';
 import Storage from '../../../services/storage/session';
+import { Session } from 'meteor/session';
 
 const { webcamsDefaultPlacement } = Meteor.settings.public.layout;
 const BROWSER_ISMOBILE = browser().mobile;
@@ -319,11 +320,30 @@ class WebcamDraggable extends Component {
       [styles.dropZoneBgBottom]: true,
     });
 
+    let resizableSize = {};
+    var height = !singleWebcam ? '50%' : '20%';
+    if (Session.get('streaming')) {
+      height = '100%';
+      resizableSize = {
+        height: "100%",
+        width: "100%"
+      }
+    } else {
+      resizableSize = singleWebcam
+        ? {
+          height: videoListSize.height,
+          width: videoListSize.width,
+        }
+        : {
+          height: videoListSize.height,
+        }
+    }
+
     return (
       <Fragment>
         <div
           className={dropZoneTopClassName}
-          style={{ height: !singleWebcam ? '50%' : '20%' }}
+          style={{ height }}
         >
           <div
             className={dropZoneBgTopClassName}
@@ -340,16 +360,7 @@ class WebcamDraggable extends Component {
           position={position}
         >
           <Resizable
-            size={
-              singleWebcam
-                ? {
-                  height: videoListSize.height,
-                  width: videoListSize.width,
-                }
-                : {
-                  height: videoListSize.height,
-                }
-            }
+            size={resizableSize}
             lockAspectRatio
             handleWrapperClass="resizeWrapper"
             onResize={dispatchResizeEvent}
@@ -394,7 +405,7 @@ class WebcamDraggable extends Component {
 
         <div
           className={dropZoneBottomClassName}
-          style={{ height: !singleWebcam ? '50%' : '20%' }}
+          style={{ height }}
         >
           <div
             className={dropZoneBgBottomClassName}

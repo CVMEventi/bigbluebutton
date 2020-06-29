@@ -143,6 +143,8 @@ export default withModalMounter(withTracker(() => {
     data.hideOverlay = true;
   }
 
+  data.streaming = Session.get('streaming');
+
   if (MediaService.shouldShowExternalVideo()) {
     data.children = (
       <ExternalVideoContainer

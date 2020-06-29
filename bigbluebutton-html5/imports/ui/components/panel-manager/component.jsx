@@ -405,8 +405,8 @@ class PanelManager extends PureComponent {
   }
 
   render() {
-    const { enableResize, openPanel } = this.props;
-    if (openPanel === '') return null;
+    const { enableResize, openPanel, streaming } = this.props;
+    if (openPanel === '' || streaming !== '') return null;
     const panels = [];
     if (enableResize) {
       panels.push(
