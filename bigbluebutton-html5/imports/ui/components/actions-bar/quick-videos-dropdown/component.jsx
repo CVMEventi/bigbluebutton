@@ -26,7 +26,6 @@ const propTypes = {
   intl: intlShape.isRequired,
   parseCurrentSlideContent: PropTypes.func.isRequired,
   amIPresenter: PropTypes.bool.isRequired,
-  isSharingVideo: PropTypes.bool.isRequired,
   stopExternalVideoShare: PropTypes.func.isRequired,
 };
 
