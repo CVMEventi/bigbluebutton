@@ -80,6 +80,11 @@ export default class Media extends Component {
       [styles.floatingOverlay]: (webcamPlacement === 'floating'),
     });
 
+    let presentationHeight = '100%';
+    if (streaming !== 'presentationOnly') {
+      presentationHeight = usersVideo.length < 1 || (webcamPlacement === 'floating') ? '100%' : '80%';
+    }
+
     return (
       <div
         id="container"
@@ -90,14 +95,14 @@ export default class Media extends Component {
           <div
             className={!swapLayout ? contentClassName : overlayClassName}
             style={{
-              maxHeight: usersVideo.length < 1 || (webcamPlacement === 'floating') ? '100%' : '80%',
+              maxHeight: presentationHeight,
               minHeight: '20%',
             }}
           >
             {children}
           </div>
         )}
-        
+
         {streaming !== 'presentationOnly' && usersVideo.length > 0 ? (
           <WebcamDraggable
             refMediaContainer={this.refContainer}
