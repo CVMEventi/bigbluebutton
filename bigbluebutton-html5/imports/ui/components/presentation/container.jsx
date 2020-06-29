@@ -2,6 +2,7 @@ import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import MediaService, { getSwapLayout, shouldEnableSwapLayout } from '/imports/ui/components/media/service';
 import { notify } from '/imports/ui/services/notification';
+import { Session } from 'meteor/session';
 import PresentationAreaService from './service';
 import { Slides } from '/imports/api/slides';
 import PresentationArea from './component';
@@ -93,5 +94,6 @@ export default withTracker(({ podId }) => {
       'bbb_force_restore_presentation_on_new_events',
       Meteor.settings.public.presentation.restoreOnUpdate,
     ),
+    streaming: Session.get('streaming'),
   };
 })(PresentationAreaContainer);

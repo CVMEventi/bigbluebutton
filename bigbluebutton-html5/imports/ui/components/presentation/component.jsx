@@ -394,6 +394,7 @@ class PresentationArea extends PureComponent {
       currentSlide,
       slidePosition,
       userIsPresenter,
+      streaming,
     } = this.props;
 
     const {
@@ -448,7 +449,7 @@ class PresentationArea extends PureComponent {
           textAlign: 'center',
         }}
       >
-        {this.renderPresentationClose()}
+        {streaming === '' && this.renderPresentationClose()}
         {this.renderPresentationDownload()}
         {this.renderPresentationFullscreen()}
         <svg

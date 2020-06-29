@@ -155,7 +155,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      meetingMuted, notify, currentUserEmoji, intl, hasPublishedPoll, streaming
+      meetingMuted, notify, currentUserEmoji, intl, hasPublishedPoll, streaming,
     } = this.props;
 
     if (prevProps.currentUserEmoji.status !== currentUserEmoji.status) {
@@ -189,7 +189,7 @@ class App extends Component {
     }
 
     if (streaming === 'chromaKey') {
-      BODY.style.backgroundColor = "#64C864";
+      BODY.style.backgroundColor = '#64C864';
     } else {
       BODY.style.backgroundColor = null;
     }
@@ -212,7 +212,7 @@ class App extends Component {
   }
 
   shouldAriaHide() {
-    const { openPanel, isPhone, streaming } = this.props;
+    const { openPanel, isPhone } = this.props;
     return openPanel !== '' && (isPhone || isLayeredView.matches);
   }
 
@@ -335,11 +335,13 @@ class App extends Component {
 
   render() {
     const {
-      customStyle, customStyleUrl, openPanel, mountModal
+      customStyle, customStyleUrl, openPanel, mountModal, streaming,
     } = this.props;
     return (
       <main className={styles.main}>
-        <BrandingBanner />
+        { streaming === '' && (
+          <BrandingBanner />
+        )}
         {this.renderActivityCheck()}
         {this.renderUserInformation()}
         <BannerBarContainer />
@@ -365,7 +367,7 @@ class App extends Component {
         <ManyWebcamsNotifier />
         {customStyleUrl ? <link rel="stylesheet" type="text/css" href={customStyleUrl} /> : null}
         {customStyle ? <link rel="stylesheet" type="text/css" href={`data:text/css;charset=UTF-8,${encodeURIComponent(customStyle)}`} /> : null}
-        <button style={{display: 'none'}} accessKey="S" onClick={() => mountModal(<StreamingContainer />)}></button>
+        <button type="button" style={{ display: 'none' }} accessKey="S" onClick={() => mountModal(<StreamingContainer />)} />
       </main>
     );
   }
