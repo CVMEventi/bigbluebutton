@@ -14,8 +14,6 @@ class ActionsBar extends PureComponent {
   render() {
     const {
       amIPresenter,
-      handleExitVideo,
-      handleJoinVideo,
       handleShareScreen,
       handleUnshareScreen,
       isVideoBroadcasting,
@@ -97,10 +95,7 @@ class ActionsBar extends PureComponent {
           <AudioControlsContainer />
           {enableVideo
             ? (
-              <JoinVideoOptionsContainer
-                handleJoinVideo={handleJoinVideo}
-                handleCloseVideo={handleExitVideo}
-              />
+              <JoinVideoOptionsContainer />
             )
             : null}
           <DesktopShare {...{

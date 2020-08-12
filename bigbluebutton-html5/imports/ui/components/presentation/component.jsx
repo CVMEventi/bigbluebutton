@@ -444,8 +444,8 @@ class PresentationArea extends PureComponent {
       <div
         style={{
           position: 'absolute',
-          width: svgDimensions.width,
-          height: svgDimensions.height,
+          width: svgDimensions.width < 0 ? 0 : svgDimensions.width,
+          height: svgDimensions.height < 0 ? 0 : svgDimensions.height,
           textAlign: 'center',
         }}
       >
@@ -455,8 +455,8 @@ class PresentationArea extends PureComponent {
         <svg
           key={currentSlide.id}
           data-test="whiteboard"
-          width={svgDimensions.width}
-          height={svgDimensions.height}
+          width={svgDimensions.width < 0 ? 0 : svgDimensions.width}
+          height={svgDimensions.height < 0 ? 0 : svgDimensions.height}
           ref={(ref) => { if (ref != null) { this.svggroup = ref; } }}
           viewBox={svgViewBox}
           version="1.1"

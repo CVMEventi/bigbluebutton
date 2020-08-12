@@ -190,8 +190,6 @@ class SettingsDropdown extends PureComponent {
   }
 
   leaveSession() {
-    document.dispatchEvent(new Event('exitVideo'));
-
     makeCall('userLeftMeeting');
     // we don't check askForFeedbackOnLogout here,
     // it is checked in meeting-ended component
@@ -260,7 +258,7 @@ class SettingsDropdown extends PureComponent {
         description={intl.formatMessage(intlMessages.hotkeysDesc)}
         onClick={() => mountModal(<ShortcutHelpComponent />)}
       />),
-      (<DropdownListItem 
+      (<DropdownListItem
         key="streaming"
         icon="video"
         label="Streaming"

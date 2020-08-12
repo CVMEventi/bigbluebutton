@@ -1,8 +1,8 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import VoiceUsers from '/imports/api/voice-users/';
-import VideoListItem from './component';
 import { Session } from 'meteor/session';
+import VideoListItem from './component';
 
 const VideoListItemContainer = props => (
   <VideoListItem {...props} />
@@ -10,11 +10,11 @@ const VideoListItemContainer = props => (
 
 export default withTracker((props) => {
   const {
-    user,
+    userId,
   } = props;
 
   return {
-    voiceUser: VoiceUsers.findOne({ intId: user.userId }),
+    voiceUser: VoiceUsers.findOne({ intId: userId }),
     streaming: Session.get('streaming'),
   };
 })(VideoListItemContainer);
