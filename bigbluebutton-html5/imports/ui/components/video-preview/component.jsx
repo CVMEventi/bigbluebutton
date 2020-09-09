@@ -62,6 +62,22 @@ const intlMessages = defineMessages({
     id: 'app.videoPreview.profileLabel',
     description: 'Quality dropdown label',
   },
+  low: {
+    id: 'app.videoPreview.quality.low',
+    description: 'Low quality option label',
+  },
+  medium: {
+    id: 'app.videoPreview.quality.medium',
+    description: 'Medium quality option label',
+  },
+  high: {
+    id: 'app.videoPreview.quality.high',
+    description: 'High quality option label',
+  },
+  hd: {
+    id: 'app.videoPreview.quality.hd',
+    description: 'High definition option label',
+  },
   cancelLabel: {
     id: 'app.videoPreview.cancelLabel',
     description: 'Cancel button label',
@@ -521,37 +537,42 @@ class VideoPreview extends Component {
           )
         }
         { shared
-          ? (
-            <span className={styles.label}>
-              {intl.formatMessage(intlMessages.sharedCameraLabel)}
-            </span>
-          )
-          : (
-            <span>
-              <label className={styles.label} htmlFor="setQuality">
-                {intl.formatMessage(intlMessages.qualityLabel)}
-              </label>
-              { availableProfiles && availableProfiles.length > 0
-                ? (
-                  <select
-                    id="setQuality"
-                    value={selectedProfile || ''}
-                    className={styles.select}
-                    onChange={this.handleSelectProfile}
-                    disabled={skipVideoPreview}
-                  >
-                    {availableProfiles.map(profile => (
-                      <option key={profile.id} value={profile.id}>
-                        {profile.name}
-                      </option>
-                    ))}
-                  </select>
-                )
-                : (
-                  <span>
-                    {intl.formatMessage(intlMessages.profileNotFoundLabel)}
-                  </span>
-                )
+           ? (
+             <span className={styles.label}>
+               {intl.formatMessage(intlMessages.sharedCameraLabel)}
+             </span>
+           )
+           : (
+             <span>
+               <label className={styles.label} htmlFor="setQuality">
+                 {intl.formatMessage(intlMessages.qualityLabel)}
+               </label>
+               { availableProfiles && availableProfiles.length > 0
+                 ? (
+                   <select
+                     id="setQuality"
+                     value={selectedProfile || ''}
+                     className={styles.select}
+                     onChange={this.handleSelectProfile}
+                     disabled={skipVideoPreview}
+                   >
+                     {availableProfiles.map(profile => { 
+                      const label = intlMessages[`${profile.id}`] 
+                        ? intl.formatMessage(intlMessages[`${profile.id}`])
+                        : profile.name;
+
+                      return (
+                       <option key={profile.id} value={profile.id}>
+                          {`${label} ${profile.id === 'hd' ? '' : intl.formatMessage(intlMessages.qualityLabel).toLowerCase()}`}
+                       </option>
+                     )})}
+                   </select>
+                 )
+                 : (
+                   <span>
+                     {intl.formatMessage(intlMessages.profileNotFoundLabel)}
+                   </span>
+                 )
                }
             </span>
           )

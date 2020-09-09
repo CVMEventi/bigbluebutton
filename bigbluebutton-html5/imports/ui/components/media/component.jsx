@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Settings from '/imports/ui/services/settings';
 import WebcamDraggable from './webcam-draggable-overlay/component';
 
 import { styles } from './styles';
@@ -59,9 +60,10 @@ export default class Media extends Component {
       [styles.floatingOverlay]: (webcamPlacement === 'floating'),
     });
 
-    let presentationHeight = '100%';
+    const { viewParticipantsWebcams } = Settings.dataSaving;
+    let fullHeight = true
     if (streaming !== 'presentationOnly') {
-      presentationHeight = usersVideo.length < 1 || (webcamPlacement === 'floating') ? '100%' : '80%';
+      fullHeight = usersVideo.length < 1 || (webcamPlacement === 'floating') || !viewParticipantsWebcams;
     }
 
     return (
@@ -74,14 +76,13 @@ export default class Media extends Component {
           <div
             className={!swapLayout ? contentClassName : overlayClassName}
             style={{
-              maxHeight: presentationHeight,
+              maxHeight: fullHeight ? '100%' : '80%',
               minHeight: '20%',
             }}
           >
             {children}
           </div>
         )}
-
         {streaming !== 'presentationOnly' && usersVideo.length > 0 ? (
           <WebcamDraggable
             refMediaContainer={this.refContainer}
