@@ -283,8 +283,17 @@ class AudioManager {
 
   onVoiceUserChanges(fields) {
     if (fields.muted !== undefined && fields.muted !== this.isMuted) {
+      let muteState;
       this.isMuted = fields.muted;
-      const muteState = this.isMuted ? 'selfMuted' : 'selfUnmuted';
+
+      if (this.isMuted) {
+        muteState = 'selfMuted';
+        this.mute();
+      } else {
+        muteState = 'selfUnmuted';
+        this.unmute();
+      }
+
       window.parent.postMessage({ response: muteState }, '*');
     }
 
@@ -565,6 +574,29 @@ class AudioManager {
       }, 'Prompting user for action to play listen only media');
       this.autoplayBlocked = true;
     }
+  }
+
+  setSenderTrackEnabled (shouldEnable) {
+    // If the bridge is set to listen only mode, nothing to do here. This method
+    // is solely for muting outbound tracks.
+    if (this.isListenOnly) return;
+
+    // Bridge -> SIP.js bridge, the only full audio capable one right now
+    const peer = this.bridge.getPeerConnection();
+    peer.getSenders().forEach(sender => {
+      const { track } = sender;
+      if (track && track.kind === 'audio') {
+        track.enabled = shouldEnable;
+      }
+    });
+  }
+
+  mute () {
+    this.setSenderTrackEnabled(false);
+  }
+
+  unmute () {
+    this.setSenderTrackEnabled(true);
   }
 }
 

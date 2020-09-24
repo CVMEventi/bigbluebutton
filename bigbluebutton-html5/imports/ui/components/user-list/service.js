@@ -179,7 +179,7 @@ const userFindSorting = {
   emojiTime: 1,
   role: 1,
   phoneUser: 1,
-  sortName: 1,
+  name: 1,
   userId: 1,
 };
 
@@ -495,6 +495,7 @@ const sortUsersByFirstName = (a, b) => {
 };
 
 const sortUsersByLastName = (a, b) => {
+  if (!a.lastName && !b.lastName) return 0;
   if (a.lastName && !b.lastName) return -1;
   if (!a.lastName && b.lastName) return 1;
 
@@ -506,11 +507,17 @@ const sortUsersByLastName = (a, b) => {
   return 0;
 };
 
+const isUserPresenter = (userId) => {
+  const user = Users.findOne({ userId },
+    { fields: { presenter: 1 } });
+  return user ? user.presenter : false;
+};
+
 export const getUserNamesLink = (docTitle, fnSortedLabel, lnSortedLabel) => {
   const mimeType = 'text/plain';
   const userNamesObj = getUsers()
     .map((u) => {
-      const name = u.sortName.split(' ');
+      const name = u.name.split(' ');
       return ({
         firstName: name[0],
         middleNames: name.length > 2 ? name.slice(1, name.length - 1) : null,
@@ -567,4 +574,5 @@ export default {
   hasPrivateChatBetweenUsers,
   toggleUserLock,
   requestUserInformation,
+  isUserPresenter,
 };
