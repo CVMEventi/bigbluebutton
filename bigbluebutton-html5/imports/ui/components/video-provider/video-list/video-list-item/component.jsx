@@ -143,6 +143,7 @@ class VideoListItem extends Component {
       numOfStreams,
       webcamDraggableState,
       swapLayout,
+      streaming,
     } = this.props;
     const availableActions = this.getAvailableActions();
     const enableVideoMenu = Meteor.settings.public.kurento.enableVideoMenu || false;
@@ -201,11 +202,15 @@ class VideoListItem extends Component {
                 </Dropdown>
               )
               : (
-                <div className={isFirefox ? styles.dropdownFireFox
-                  : styles.dropdown}
+                <div className={cx({
+                  [styles.dropdownFirefox]: isFirefox,
+                  [styles.dropdown]: !isFirefox,
+                  [styles.dropdownStreaming]: streaming !== '',
+                })}
                 >
                   <span className={cx({
-                    [styles.userName]: true,
+                    [styles.userName]: streaming === '',
+                    [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly'].includes(streaming),
                     [styles.noMenu]: numOfStreams < 3,
                   })}
                   >
@@ -214,8 +219,8 @@ class VideoListItem extends Component {
                 </div>
               )
           }
-            {voiceUser.muted && !voiceUser.listenOnly ? <Icon className={styles.muted} iconName="unmute_filled" /> : null}
-            {voiceUser.listenOnly ? <Icon className={styles.voice} iconName="listen" /> : null}
+            {streaming === '' && voiceUser.muted && !voiceUser.listenOnly ? <Icon className={styles.muted} iconName="unmute_filled" /> : null}
+            {streaming === '' && voiceUser.listenOnly ? <Icon className={styles.voice} iconName="listen" /> : null}
           </div>
           )
         }

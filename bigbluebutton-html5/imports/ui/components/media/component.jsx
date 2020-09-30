@@ -61,7 +61,7 @@ export default class Media extends Component {
     });
 
     const { viewParticipantsWebcams } = Settings.dataSaving;
-    let fullHeight = true
+    let fullHeight = true;
     if (streaming !== 'presentationOnly') {
       fullHeight = usersVideo.length < 1 || (webcamPlacement === 'floating') || !viewParticipantsWebcams;
     }
@@ -72,7 +72,7 @@ export default class Media extends Component {
         className={cx(styles.container)}
         ref={this.refContainer}
       >
-        {streaming !== 'chromaKey' && (
+        {!['chromaKey', 'webcamsOnly'].includes(streaming) && (
           <div
             className={!swapLayout ? contentClassName : overlayClassName}
             style={{

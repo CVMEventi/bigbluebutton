@@ -190,6 +190,8 @@ class App extends Component {
 
     if (streaming === 'chromaKey') {
       BODY.style.backgroundColor = '#64C864';
+    } else if (streaming === 'webcamsOnly') {
+      BODY.style.backgroundColor = '#000000';
     } else {
       BODY.style.backgroundColor = null;
     }
