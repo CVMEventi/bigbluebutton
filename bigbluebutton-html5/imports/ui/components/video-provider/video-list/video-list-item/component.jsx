@@ -190,8 +190,16 @@ class VideoListItem extends Component {
           <div className={styles.info}>
             {enableVideoMenu && availableActions.length >= 3
               ? (
-                <Dropdown className={isFirefox ? styles.dropdownFireFox : styles.dropdown}>
-                  <DropdownTrigger className={styles.dropdownTrigger}>
+                <Dropdown className={cx({
+                  [styles.dropdownFirefox]: isFirefox,
+                  [styles.dropdown]: !isFirefox,
+                  [styles.dropdownStreaming]: streaming !== '',
+                })}>
+                  <DropdownTrigger 
+                  className={cx({
+                    [styles.dropdownTrigger]: streaming === '',
+                    [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly'].includes(streaming),
+                  })}>
                     <span>{name}</span>
                   </DropdownTrigger>
                   <DropdownContent placement="top left" className={styles.dropdownContent}>
