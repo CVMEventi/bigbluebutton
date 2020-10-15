@@ -12,6 +12,7 @@ import getFromUserSettings from '/imports/ui/services/users-settings';
 import deviceInfo from '/imports/utils/deviceInfo';
 import UserInfos from '/imports/api/users-infos';
 import { startBandwidthMonitoring, updateNavigatorConnection } from '/imports/ui/services/network-information/index';
+import logger from '/imports/startup/client/logger';
 
 import {
   getFontSize,
@@ -91,7 +92,18 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     changed(id, fields) {
       const hasNewConnection = 'connectionId' in fields && (fields.connectionId !== Meteor.connection._lastSessionId);
 
-      if (fields.ejected || hasNewConnection) {
+      if (hasNewConnection) {
+        logger.info({
+          logCode: 'user_connection_id_changed',
+          extraInfo: {
+            currentConnectionId: fields.connectionId,
+            previousConnectionId: Meteor.connection._lastSessionId,
+          },
+        }, 'User connectionId changed ');
+        endMeeting('401');
+      }
+
+      if (fields.ejected) {
         endMeeting('403');
       }
     },
@@ -119,7 +131,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     hasPublishedPoll: publishedPoll,
     startBandwidthMonitoring,
     handleNetworkConnection: () => updateNavigatorConnection(navigator.connection),
-    streaming: Session.get('streaming')
+    streaming: Session.get('streaming'),
   };
 })(AppContainer)));
 

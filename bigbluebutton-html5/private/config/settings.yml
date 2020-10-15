@@ -17,6 +17,9 @@ public:
     cdn: ""
     basename: "/html5client"
     askForFeedbackOnLogout: false
+    # the default logoutUrl matches window.location.origin i.e. bigbluebutton.org for demo.bigbluebutton.org
+    # in some cases we want only custom logoutUrl to be used when provided on meeting create. Default value: true
+    allowDefaultLogoutUrl: true
     allowUserLookup: false
     enableNetworkInformation: false
     enableLimitOfViewersInWebcam: false
@@ -281,7 +284,7 @@ public:
     callHangupMaximumRetries: 10
     echoTestNumber: 'echo'
     relayOnlyOnReconnect: false
-    listenOnlyCallTimeout: 15000
+    listenOnlyCallTimeout: 25000
   presentation:
     defaultPresentationFile: default.pdf
     panZoomThrottle: 32
@@ -475,5 +478,7 @@ private:
       version: 50
     - browser: electron
       version: [0, 36]
+    - browser: SamsungInternet
+      version: 10
     - browser: YandexBrowser
       version: 19

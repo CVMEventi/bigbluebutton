@@ -61,9 +61,10 @@ export default class Media extends Component {
     });
 
     const { viewParticipantsWebcams } = Settings.dataSaving;
+    const showVideo = usersVideo.length > 0 && viewParticipantsWebcams && streaming !== 'presentationOnly';
     let fullHeight = true;
     if (streaming !== 'presentationOnly') {
-      fullHeight = usersVideo.length < 1 || (webcamPlacement === 'floating') || !viewParticipantsWebcams;
+      fullHeight = !showVideo || (webcamPlacement === 'floating');
     }
 
     return (
@@ -83,7 +84,7 @@ export default class Media extends Component {
             {children}
           </div>
         )}
-        {streaming !== 'presentationOnly' && usersVideo.length > 0 ? (
+        {showVideo ? (
           <WebcamDraggable
             refMediaContainer={this.refContainer}
             swapLayout={swapLayout}

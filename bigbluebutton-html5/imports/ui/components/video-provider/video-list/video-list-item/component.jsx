@@ -194,12 +194,14 @@ class VideoListItem extends Component {
                   [styles.dropdownFirefox]: isFirefox,
                   [styles.dropdown]: !isFirefox,
                   [styles.dropdownStreaming]: streaming !== '',
-                })}>
-                  <DropdownTrigger 
-                  className={cx({
-                    [styles.dropdownTrigger]: streaming === '',
-                    [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly'].includes(streaming),
-                  })}>
+                })}
+                >
+                  <DropdownTrigger
+                    className={cx({
+                      [styles.dropdownTrigger]: streaming === '',
+                      [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly'].includes(streaming),
+                    })}
+                  >
                     <span>{name}</span>
                   </DropdownTrigger>
                   <DropdownContent placement="top left" className={styles.dropdownContent}>
