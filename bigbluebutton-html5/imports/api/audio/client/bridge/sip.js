@@ -401,7 +401,6 @@ class SIPSession {
           let bridgeError;
 
           if (!this._reconnecting) {
-
             logger.info({
               logCode: 'sip_js_session_ua_disconnected',
               extraInfo: {
@@ -470,7 +469,7 @@ class SIPSession {
 
         const code = getErrorCode(error);
 
-        //Websocket's 1006 is currently mapped to BBB's 1002
+        // Websocket's 1006 is currently mapped to BBB's 1002
         if (code === 1006) {
           this.stopUserAgent();
 
@@ -1049,6 +1048,21 @@ export default class SIPBridge extends BaseAudioBridge {
 
     this.media.inputDevice.inputDeviceId = inputDeviceId;
     return inputDeviceId;
+  }
+
+  liveChangeInputDevice(deviceId) {
+    const constraints = {
+      audio: {
+        deviceId,
+      },
+    };
+
+    return navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+      const peer = this.getPeerConnection();
+      const senders = peer.getSenders()[0];
+      const firstTrack = stream.getAudioTracks()[0];
+      senders.replaceTrack(firstTrack);
+    });
   }
 
   async changeOutputDevice(value) {
