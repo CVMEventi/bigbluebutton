@@ -32,6 +32,11 @@ class StreamingComponent extends React.Component {
     Session.set('streaming', streaming !== 'presentationOnly' ? 'presentationOnly' : '');
   }
 
+  handleRecord() {
+    const streaming = Session.get('streaming');
+    Session.set('streaming', streaming !== 'record' ? 'record' : '');
+  }
+
   render() {
     const { intl, streaming } = this.props;
 
@@ -58,9 +63,16 @@ class StreamingComponent extends React.Component {
           size="lg"
         />
         <Button
+          className={styles.buttonMargin}
           label="Presentation Only"
           onClick={this.handlePresentationOnly}
           color={streaming === 'presentationOnly' ? 'danger' : 'primary'}
+          size="lg"
+        />
+        <Button
+          label="Record"
+          onClick={this.handleRecord}
+          color={streaming === 'record' ? 'danger' : 'primary'}
           size="lg"
         />
       </Modal>

@@ -199,7 +199,7 @@ class VideoListItem extends Component {
                   <DropdownTrigger
                     className={cx({
                       [styles.dropdownTrigger]: streaming === '',
-                      [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly'].includes(streaming),
+                      [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly', 'record'].includes(streaming),
                     })}
                   >
                     <span>{name}</span>
@@ -220,7 +220,7 @@ class VideoListItem extends Component {
                 >
                   <span className={cx({
                     [styles.userName]: streaming === '',
-                    [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly'].includes(streaming),
+                    [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly', 'record'].includes(streaming),
                     [styles.noMenu]: numOfStreams < 3,
                   })}
                   >
