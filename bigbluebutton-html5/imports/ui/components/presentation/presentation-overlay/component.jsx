@@ -555,7 +555,7 @@ export default class PresentationOverlay extends Component {
           role="presentation"
           onTouchStart={this.handleTouchStart}
           onMouseDown={this.mouseDownHandler}
-          onWheel={this.mouseZoomHandler}
+          //onWheel={this.mouseZoomHandler}
           onBlur={() => {}}
           style={overlayStyle}
         >

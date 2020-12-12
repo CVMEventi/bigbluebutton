@@ -288,6 +288,7 @@ class PresentationToolbar extends PureComponent {
         }
         {
           <div className={styles.presentationZoomControls}>
+            {/*
             {
               !isMobileBrowser
                 ? (
@@ -324,6 +325,7 @@ class PresentationToolbar extends PureComponent {
               className={cx(styles.fitToWidth, styles.presentationBtn)}
               tooltipDistance={tooltipDistance}
             />
+            */}
             {
               ALLOW_FULLSCREEN
                 ? (
