@@ -583,6 +583,7 @@ class PresentationArea extends PureComponent {
     const {
       intl,
       userIsPresenter,
+      streaming,
     } = this.props;
     const { isFullscreen } = this.state;
 
@@ -595,6 +596,7 @@ class PresentationArea extends PureComponent {
         isFullscreen={isFullscreen}
         dark
         bottom
+        hidden={streaming !== ''}
       />
     );
   }
