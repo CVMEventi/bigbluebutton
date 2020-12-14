@@ -322,7 +322,7 @@ class WebcamDraggable extends Component {
 
     let resizableSize = {};
     var height = !singleWebcam ? '50%' : '20%';
-    if (Session.get('streaming')) {
+    if (Session.get('streaming') && Session.get('streaming') !== 'record') {
       height = '100%';
       resizableSize = {
         height: "100%",
