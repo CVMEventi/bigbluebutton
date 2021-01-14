@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
 import Langmap from 'langmap';
 import fs from 'fs';
+import path from 'path';
 import heapdump from 'heapdump';
 import Users from '/imports/api/users';
 import './settings';
@@ -14,6 +15,11 @@ import setMinBrowserVersions from './minBrowserVersion';
 import userLeaving from '/imports/api/users/server/methods/userLeaving';
 
 const AVAILABLE_LOCALES = fs.readdirSync('assets/app/locales');
+
+process.on('uncaughtException', (err) => {
+  Logger.error(`uncaughtException: ${err}`);
+  process.exit(1);
+});
 
 Meteor.startup(() => {
   const APP_CONFIG = Meteor.settings.public.app;
@@ -33,18 +39,26 @@ Meteor.startup(() => {
 
       // Skipping heartbeat, because websocket is sending data
       if (currentTime - this.ws.lastSentFrameTimestamp < 10000) {
-        Logger.info('Skipping heartbeat, because websocket is sending data', {
-          currentTime,
-          lastSentFrameTimestamp: this.ws.lastSentFrameTimestamp,
-          userId: this.session.connection._meteorSession.userId,
-        });
-        return;
+        try {
+          Logger.info('Skipping heartbeat, because websocket is sending data', {
+            currentTime,
+            lastSentFrameTimestamp: this.ws.lastSentFrameTimestamp,
+            userId: this.session.connection._meteorSession.userId,
+          });
+          return;
+        } catch (err) {
+          Logger.error(`Skipping heartbeat error: ${err}`);
+        }
       }
 
       const supportsHeartbeats = this.ws.ping(null, () => clearTimeout(this.hto_ref));
       if (supportsHeartbeats) {
         this.hto_ref = setTimeout(() => {
-          Logger.info('Heartbeat timeout', { userId: this.session.connection._meteorSession.userId, sentAt: currentTime, now: new Date().getTime() });
+          try {
+            Logger.info('Heartbeat timeout', { userId: this.session.connection._meteorSession.userId, sentAt: currentTime, now: new Date().getTime() });
+          } catch (err) {
+            Logger.error(`Heartbeat timeout error: ${err}`);
+          }
         }, Meteor.server.options.heartbeatTimeout);
       } else {
         Logger.error('Unexpected error supportsHeartbeats=false');
@@ -53,17 +67,24 @@ Meteor.startup(() => {
 
     // https://github.com/davhani/hagty/blob/6a5c78e9ae5a5e4ade03e747fb4cc8ea2df4be0c/faye-websocket/lib/faye/websocket/api.js#L84-L88
     const newSend = function send(data) {
-      this.lastSentFrameTimestamp = new Date().getTime();
+      try {
+        this.lastSentFrameTimestamp = new Date().getTime();
 
-      // Call https://github.com/meteor/meteor/blob/1e7e56eec8414093cd0c1c70750b894069fc972a/packages/ddp-common/heartbeat.js#L80-L88
-      this.meteorHeartbeat._seenPacket = true;
-      if (this.meteorHeartbeat._heartbeatTimeoutHandle) {
-        this.meteorHeartbeat._clearHeartbeatTimeoutTimer();
+        if (this.meteorHeartbeat) {
+          // Call https://github.com/meteor/meteor/blob/1e7e56eec8414093cd0c1c70750b894069fc972a/packages/ddp-common/heartbeat.js#L80-L88
+          this.meteorHeartbeat._seenPacket = true;
+          if (this.meteorHeartbeat._heartbeatTimeoutHandle) {
+            this.meteorHeartbeat._clearHeartbeatTimeoutTimer();
+          }
+        }
+
+        if (this.readyState > 1/* API.OPEN = 1 */) return false;
+        if (!(data instanceof Buffer)) data = String(data);
+        return this._driver.messages.write(data);
+      } catch (err) {
+        console.error('Error on send data', err);
+        return false;
       }
-
-      if (this.readyState > 1/* API.OPEN = 1 */) return false;
-      if (!(data instanceof Buffer)) data = String(data);
-      return this._driver.messages.write(data);
     };
 
     Meteor.setInterval(() => {
@@ -104,6 +125,14 @@ Meteor.startup(() => {
     memwatch.on('leak', (info) => {
       Logger.info('memwatch leak', info);
     });
+  }
+
+  if (memoryMonitoringSettings.heapdump.enabled) {
+    const { heapdumpFolderPath, heapdumpIntervalMs } = memoryMonitoringSettings.heapdump;
+    Meteor.setInterval(() => {
+      heapdump.writeSnapshot(path.join(heapdumpFolderPath, `${new Date().toISOString()}.heapsnapshot`));
+      Logger.info('Heapsnapshot file successfully written');
+    }, heapdumpIntervalMs);
   }
 
   if (CDN_URL.trim()) {
