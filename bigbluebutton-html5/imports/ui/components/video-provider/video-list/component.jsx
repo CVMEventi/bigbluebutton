@@ -14,7 +14,8 @@ import Button from '/imports/ui/components/button/component';
 
 const propTypes = {
   streams: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onMount: PropTypes.func.isRequired,
+  onVideoItemMount: PropTypes.func.isRequired,
+  onVideoItemUnmount: PropTypes.func.isRequired,
   webcamDraggableDispatch: PropTypes.func.isRequired,
   intl: PropTypes.objectOf(Object).isRequired,
   swapLayout: PropTypes.bool.isRequired,
@@ -303,8 +304,9 @@ class VideoList extends Component {
   renderVideoList() {
     const {
       intl,
-      plainStreams,
-      onMount,
+      streams: plainStreams,
+      onVideoItemMount,
+      onVideoItemUnmount,
       swapLayout,
     } = this.props;
     const { focusedId } = this.state;
@@ -351,10 +353,11 @@ class VideoList extends Component {
             name={name}
             mirrored={isMirrored}
             actions={actions}
-            onMount={(videoRef) => {
+            onVideoItemMount={(videoRef) => {
               this.handleCanvasResize();
-              onMount(cameraId, videoRef);
+              onVideoItemMount(cameraId, videoRef);
             }}
+            onVideoItemUnmount={onVideoItemUnmount}
             swapLayout={swapLayout}
           />
         </div>
