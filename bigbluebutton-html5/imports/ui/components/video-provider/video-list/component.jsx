@@ -130,7 +130,9 @@ class VideoList extends Component {
   }
 
   setOptimalGrid() {
-    const { streams } = this.props;
+    const { streams: plainStreams } = this.props;
+    const streams = plainStreams.filter(item => !this.cameraIsHidden(item.cameraId));
+
     let numItems = streams.length;
     if (numItems < 1 || !this.canvas || !this.grid) {
       return;
@@ -234,6 +236,8 @@ class VideoList extends Component {
     if (!this.cameraIsHidden(cameraId)) {
       this.setState({
         hiddenCameras: hiddenCameras.concat([cameraId]),
+      }, () => {
+        this.setOptimalGrid();
       });
     }
   }
