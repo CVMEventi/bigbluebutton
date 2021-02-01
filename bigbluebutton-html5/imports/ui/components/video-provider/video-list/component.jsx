@@ -91,6 +91,7 @@ class VideoList extends Component {
       },
       autoplayBlocked: false,
       mirroredCameras: [],
+      hiddenCameras: [],
     };
 
     this.ticking = false;
@@ -226,6 +227,21 @@ class VideoList extends Component {
     return mirroredCameras.indexOf(cameraId) >= 0;
   }
 
+
+  hideCamera(cameraId) {
+    const { hiddenCameras } = this.state;
+    if (!this.cameraIsHidden(cameraId)) {
+      this.setState({
+        hiddenCameras: hiddenCameras.concat([cameraId]),
+      });
+    }
+  }
+
+  cameraIsHidden(cameraId) {
+    const { hiddenCameras } = this.state;
+    return hiddenCameras.indexOf(cameraId) >= 0;
+  }
+
   handleCanvasResize() {
     if (!this.ticking) {
       window.requestAnimationFrame(() => {
@@ -287,11 +303,13 @@ class VideoList extends Component {
   renderVideoList() {
     const {
       intl,
-      streams,
+      plainStreams,
       onMount,
       swapLayout,
     } = this.props;
     const { focusedId } = this.state;
+
+    const streams = plainStreams.filter(item => !this.cameraIsHidden(item.cameraId));
 
     const numOfStreams = streams.length;
     return streams.map((stream) => {
@@ -299,10 +317,15 @@ class VideoList extends Component {
       const isFocused = focusedId === cameraId;
       const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';
       const isMirrored = this.cameraIsMirrored(cameraId);
-      let actions = [{
-        label: intl.formatMessage(intlMessages['mirrorLabel']),
-        description: intl.formatMessage(intlMessages['mirrorDesc']),
+      const actions = [{
+        label: intl.formatMessage(intlMessages.mirrorLabel),
+        description: intl.formatMessage(intlMessages.mirrorDesc),
         onClick: () => this.mirrorCamera(cameraId),
+      },
+      {
+        label: 'Hide',
+        description: 'Hide camera',
+        onClick: () => this.hideCamera(cameraId),
       }];
 
       if (numOfStreams > 2) {
