@@ -586,12 +586,15 @@ class PresentationArea extends PureComponent {
       ${content}
       ${intl.formatMessage(intlMessages.slideContentEnd)}` : intl.formatMessage(intlMessages.noSlideContent);
 
+    const realWidth = streaming !== '' ? '100%' : (svgDimensions.width < 0 ? 0 : svgDimensions.width)
+    const realHeight = streaming !== '' ? '100%' : (svgDimensions.height < 0 ? 0 : svgDimensions.height)
+
     return (
       <div
         style={{
           position: 'absolute',
-          width: svgDimensions.width < 0 ? 0 : svgDimensions.width,
-          height: svgDimensions.height < 0 ? 0 : svgDimensions.height,
+          width: realWidth,
+          height: realHeight,
           textAlign: 'center',
           display: layoutSwapped ? 'none' : 'block',
         }}
@@ -603,8 +606,8 @@ class PresentationArea extends PureComponent {
         <svg
           key={currentSlide.id}
           data-test="whiteboard"
-          width={svgDimensions.width < 0 ? 0 : svgDimensions.width}
-          height={svgDimensions.height < 0 ? 0 : svgDimensions.height}
+          width={realWidth}
+          height={realHeight}
           ref={(ref) => { if (ref != null) { this.svggroup = ref; } }}
           viewBox={svgViewBox}
           version="1.1"
@@ -781,6 +784,7 @@ class PresentationArea extends PureComponent {
       userIsPresenter,
       multiUser,
       slidePosition,
+      streaming,
     } = this.props;
 
     const {
@@ -839,7 +843,7 @@ class PresentationArea extends PureComponent {
           <div
             className={styles.svgContainer}
             style={{
-              height: svgHeight + toolbarHeight,
+              height: streaming !== '' ? '100%' : svgHeight + toolbarHeight,
             }}
           >
             {showSlide && svgWidth > 0 && svgHeight > 0
