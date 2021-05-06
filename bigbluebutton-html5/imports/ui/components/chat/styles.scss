@@ -40,6 +40,8 @@
   @include mq($small-only) {
     transform: none !important;
   }
+
+  border-top: 1px var(--user-list-bg) solid;
 }
 
 .header {

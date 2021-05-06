@@ -535,6 +535,7 @@ class PresentationArea extends PureComponent {
       slidePosition,
       userIsPresenter,
       layoutSwapped,
+      streaming,
     } = this.props;
 
     const {
@@ -596,7 +597,7 @@ class PresentationArea extends PureComponent {
         }}
       >
         <span id="currentSlideText" className={styles.visuallyHidden}>{slideContent}</span>
-        {this.renderPresentationClose()}
+        {streaming === '' && this.renderPresentationClose()}
         {this.renderPresentationDownload()}
         {this.renderPresentationFullscreen()}
         <svg
@@ -718,6 +719,7 @@ class PresentationArea extends PureComponent {
     const {
       intl,
       userIsPresenter,
+      streaming,
     } = this.props;
     const { isFullscreen } = this.state;
 
@@ -730,6 +732,7 @@ class PresentationArea extends PureComponent {
         isFullscreen={isFullscreen}
         dark
         bottom
+        hidden={streaming !== ''}
       />
     );
   }

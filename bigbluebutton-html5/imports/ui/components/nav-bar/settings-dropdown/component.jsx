@@ -17,6 +17,7 @@ import DropdownListSeparator from '/imports/ui/components/dropdown/list/separato
 import ShortcutHelpComponent from '/imports/ui/components/shortcut-help/component';
 import withShortcutHelper from '/imports/ui/components/shortcut-help/service';
 import FullscreenService from '../../fullscreen-button/service';
+import StreamingContainer from '/imports/ui/components/streaming/container';
 
 import { styles } from '../styles';
 
@@ -258,6 +259,13 @@ class SettingsDropdown extends PureComponent {
         label={intl.formatMessage(intlMessages.hotkeysLabel)}
         description={intl.formatMessage(intlMessages.hotkeysDesc)}
         onClick={() => mountModal(<ShortcutHelpComponent />)}
+      />),
+      (<DropdownListItem 
+        key="streaming"
+        icon="video"
+        label="Streaming"
+        description=""
+        onClick={() => mountModal(<StreamingContainer />)}
       />),
       (isMeteorConnected ? <DropdownListSeparator key={_.uniqueId('list-separator-')} /> : null),
       allowedToEndMeeting && isMeteorConnected

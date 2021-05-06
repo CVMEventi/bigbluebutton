@@ -29,12 +29,17 @@ import { styles } from './styles';
 import { makeCall } from '/imports/ui/services/api';
 import ConnectionStatusService from '/imports/ui/components/connection-status/service';
 import { NAVBAR_HEIGHT } from '/imports/ui/components/layout/layout-manager/component';
+import BrandingBanner from '/imports/ui/components/branding-banner/component';
+import { withModalMounter } from '/imports/ui/components/modal/service';
+import StreamingContainer from '/imports/ui/components/streaming/container';
 
 const MOBILE_MEDIA = 'only screen and (max-width: 40em)';
 const APP_CONFIG = Meteor.settings.public.app;
 const DESKTOP_FONT_SIZE = APP_CONFIG.desktopFontSize;
 const MOBILE_FONT_SIZE = APP_CONFIG.mobileFontSize;
 const ENABLE_NETWORK_MONITORING = Meteor.settings.public.networkMonitoring.enableNetworkMonitoring;
+
+const BODY = document.getElementsByTagName('body')[0];
 
 const intlMessages = defineMessages({
   userListLabel: {
@@ -179,6 +184,7 @@ class App extends Component {
       randomlySelectedUser,
       mountModal,
       isPresenter,
+      streaming,
     } = this.props;
 
     if (!isPresenter && randomlySelectedUser.length > 0) mountModal(<RandomUserSelectContainer />);
@@ -223,6 +229,14 @@ class App extends Component {
         intl.formatMessage(intlMessages.pollPublishedLabel), 'info', 'polling',
       );
     }
+
+    if (streaming === 'chromaKey') {
+      BODY.style.backgroundColor = "#64C864";
+    } else if (streaming === 'webcamsOnly') {
+      BODY.style.backgroundColor = '#000000';
+    } else {
+      BODY.style.backgroundColor = null;
+    }
   }
 
   componentWillUnmount() {
@@ -250,7 +264,7 @@ class App extends Component {
 
   renderPanel() {
     const { enableResize } = this.state;
-    const { openPanel, isRTL } = this.props;
+    const { openPanel, isRTL, streaming } = this.props;
 
     return (
       <PanelManager
@@ -258,6 +272,7 @@ class App extends Component {
           openPanel,
           enableResize,
           isRTL,
+          streaming,
         }}
         shouldAriaHide={this.shouldAriaHide}
       />
@@ -265,9 +280,10 @@ class App extends Component {
   }
 
   renderNavBar() {
-    const { navbar } = this.props;
+    const { navbar, streaming } = this.props;
 
     if (!navbar) return null;
+    if (streaming !== '') return null;
 
     return (
       <header
@@ -329,9 +345,10 @@ class App extends Component {
     const {
       actionsbar,
       intl,
+      streaming,
     } = this.props;
 
-    if (!actionsbar) return null;
+    if (!actionsbar || streaming !== '') return null;
 
     return (
       <section
@@ -369,11 +386,14 @@ class App extends Component {
 
   render() {
     const {
-      customStyle, customStyleUrl, openPanel, layoutContextState,
+      customStyle, customStyleUrl, openPanel, layoutContextState, mountModal, streaming,
     } = this.props;
 
     return (
       <main className={styles.main}>
+        { streaming === '' && (
+          <BrandingBanner />
+        )}
         {this.renderActivityCheck()}
         {this.renderUserInformation()}
         <BannerBarContainer />
@@ -400,6 +420,7 @@ class App extends Component {
         <ManyWebcamsNotifier />
         {customStyleUrl ? <link rel="stylesheet" type="text/css" href={customStyleUrl} /> : null}
         {customStyle ? <link rel="stylesheet" type="text/css" href={`data:text/css;charset=UTF-8,${encodeURIComponent(customStyle)}`} /> : null}
+        <button type="button" style={{display: 'none'}} accessKey="S" onClick={() => mountModal(<StreamingContainer />)} />
       </main>
     );
   }
@@ -408,4 +429,4 @@ class App extends Component {
 App.propTypes = propTypes;
 App.defaultProps = defaultProps;
 
-export default injectIntl(App);
+export default withModalMounter(injectIntl(App));

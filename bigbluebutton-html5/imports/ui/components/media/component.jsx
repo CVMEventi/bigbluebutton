@@ -46,6 +46,7 @@ export default class Media extends Component {
       usersVideo,
       layoutContextState,
       isMeteorConnected,
+      streaming,
     } = this.props;
 
     const { webcamsPlacement: placement } = layoutContextState;
@@ -71,44 +72,54 @@ export default class Media extends Component {
     const showVideo = usersVideo.length > 0 && viewParticipantsWebcams && isMeteorConnected;
     const fullHeight = !showVideo || (webcamsPlacement === 'floating');
 
+    let maxPresentationHeight = '100%';
+    let maxPresentationWidth = '100%';
+    if (streaming !== 'presentationOnly') {
+      maxPresentationHeight = usersVideo.length > 0
+      && (
+        webcamsPlacement !== 'left'
+        || webcamsPlacement !== 'right'
+      )
+      && (
+        webcamsPlacement === 'top'
+        || webcamsPlacement === 'bottom'
+      )
+        ? '80%'
+        : '100%'
+
+        maxPresentationWidth = usersVideo.length > 0
+        && (
+          webcamsPlacement !== 'top'
+          || webcamsPlacement !== 'bottom'
+        )
+        && (
+          webcamsPlacement === 'left'
+          || webcamsPlacement === 'right'
+        )
+          ? '80%'
+          : '100%'
+    }
+
     return (
       <div
         id="container"
         className={containerClassName}
         ref={this.refContainer}
       >
-        <div
-          className={!swapLayout ? contentClassName : overlayClassName}
-          style={{
-            maxHeight: usersVideo.length > 0
-            && (
-              webcamsPlacement !== 'left'
-              || webcamsPlacement !== 'right'
-            )
-            && (
-              webcamsPlacement === 'top'
-              || webcamsPlacement === 'bottom'
-            )
-              ? '80%'
-              : '100%',
-            minHeight: isMobile && window.innerWidth > window.innerHeight ? '50%' : '20%',
-            maxWidth: usersVideo.length > 0
-            && (
-              webcamsPlacement !== 'top'
-              || webcamsPlacement !== 'bottom'
-            )
-            && (
-              webcamsPlacement === 'left'
-              || webcamsPlacement === 'right'
-            )
-              ? '80%'
-              : '100%',
-            minWidth: '20%',
-          }}
-        >
-          {children}
-        </div>
-        {showVideo ? (
+        {!['chromaKey', 'webcamsOnly'].includes(streaming) && (
+          <div
+            className={!swapLayout ? contentClassName : overlayClassName}
+            style={{
+              maxHeight: maxPresentationHeight,
+              minHeight: isMobile && window.innerWidth > window.innerHeight ? '50%' : '20%',
+              maxWidth: maxPresentationWidth,
+              minWidth: '20%',
+            }}
+          >
+            {children}
+          </div>
+        )}
+        {streaming !== 'presentationOnly' && showVideo ? (
           <WebcamDraggable
             refMediaContainer={this.refContainer}
             swapLayout={swapLayout}

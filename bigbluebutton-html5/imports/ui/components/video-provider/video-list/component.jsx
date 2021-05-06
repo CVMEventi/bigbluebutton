@@ -94,6 +94,7 @@ class VideoList extends Component {
       },
       autoplayBlocked: false,
       mirroredCameras: [],
+      hiddenCameras: [],
     };
 
     this.ticking = false;
@@ -237,6 +238,22 @@ class VideoList extends Component {
     return mirroredCameras.indexOf(stream) >= 0;
   }
 
+  hideCamera(cameraId) {
+    const { hiddenCameras } = this.state;
+    if (!this.cameraIsHidden(cameraId)) {
+      this.setState({
+        hiddenCameras: hiddenCameras.concat([cameraId]),
+      }, () => {
+        this.setOptimalGrid();
+      });
+    }
+  }
+
+  cameraIsHidden(cameraId) {
+    const { hiddenCameras } = this.state;
+    return hiddenCameras.indexOf(cameraId) >= 0;
+  }
+
   handleCanvasResize() {
     if (!this.ticking) {
       window.requestAnimationFrame(() => {
@@ -306,52 +323,59 @@ class VideoList extends Component {
     const { focusedId } = this.state;
 
     const numOfStreams = streams.length;
-    return streams.map((vs) => {
-      const { stream, userId, name } = vs;
-      const isFocused = focusedId === stream;
-      const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';
-      const isMirrored = this.cameraIsMirrored(stream);
-      let actions = [{
-        actionName: ACTION_NAME_MIRROR,
-        label: intl.formatMessage(intlMessages['mirrorLabel']),
-        description: intl.formatMessage(intlMessages['mirrorDesc']),
-        onClick: () => this.mirrorCamera(stream),
-      }];
+    return streams
+      .filter(item => !this.cameraIsHidden(item.userId))
+      .map((vs) => {
+        const { stream, userId, name } = vs;
+        const isFocused = focusedId === stream;
+        const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';
+        const isMirrored = this.cameraIsMirrored(stream);
+        let actions = [{
+          actionName: ACTION_NAME_MIRROR,
+          label: intl.formatMessage(intlMessages['mirrorLabel']),
+          description: intl.formatMessage(intlMessages['mirrorDesc']),
+          onClick: () => this.mirrorCamera(stream),
+        },
+        {
+          label: 'Hide',
+          description: 'Hide camera',
+          onClick: () => this.hideCamera(userId),
+        }];
 
-      if (numOfStreams > 2) {
-        actions.push({
-          actionName: ACTION_NAME_FOCUS,
-          label: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Label`]),
-          description: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Desc`]),
-          onClick: () => this.handleVideoFocus(stream),
-        });
-      }
+        if (numOfStreams > 2) {
+          actions.push({
+            actionName: ACTION_NAME_FOCUS,
+            label: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Label`]),
+            description: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Desc`]),
+            onClick: () => this.handleVideoFocus(stream),
+          });
+        }
 
-      return (
-        <div
-          key={stream}
-          className={cx({
-            [styles.videoListItem]: true,
-            [styles.focused]: focusedId === stream && numOfStreams > 2,
-          })}
-        >
-          <VideoListItemContainer
-            numOfStreams={numOfStreams}
-            cameraId={stream}
-            userId={userId}
-            name={name}
-            mirrored={isMirrored}
-            actions={actions}
-            onVideoItemMount={(videoRef) => {
-              this.handleCanvasResize();
-              onVideoItemMount(stream, videoRef);
-            }}
-            onVideoItemUnmount={onVideoItemUnmount}
-            swapLayout={swapLayout}
-          />
-        </div>
-      );
-    });
+        return (
+          <div
+            key={stream}
+            className={cx({
+              [styles.videoListItem]: true,
+              [styles.focused]: focusedId === stream && numOfStreams > 2,
+            })}
+          >
+            <VideoListItemContainer
+              numOfStreams={numOfStreams}
+              cameraId={stream}
+              userId={userId}
+              name={name}
+              mirrored={isMirrored}
+              actions={actions}
+              onVideoItemMount={(videoRef) => {
+                this.handleCanvasResize();
+                onVideoItemMount(stream, videoRef);
+              }}
+              onVideoItemUnmount={onVideoItemUnmount}
+              swapLayout={swapLayout}
+            />
+          </div>
+        );
+      });
   }
 
   render() {

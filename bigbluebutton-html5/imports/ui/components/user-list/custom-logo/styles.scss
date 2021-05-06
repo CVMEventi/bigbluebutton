@@ -8,8 +8,8 @@
 .branding {
   padding: 0 var(--sm-padding-x);
   width: 100%;
+  text-align: center;
   & > img {
-    max-height: 2rem;
     max-width: 100%;
   }
 }

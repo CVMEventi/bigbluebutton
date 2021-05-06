@@ -69,6 +69,7 @@ export default withTracker(() => {
   const openPanel = Session.get('openPanel');
   const isExpanded = openPanel !== '';
   const hasUnreadNotes = NoteService.hasUnreadNotes();
+  const streaming = Session.get('streaming');
 
   return {
     isExpanded,
@@ -78,5 +79,6 @@ export default withTracker(() => {
     meetingId,
     hasUnreadNotes,
     presentationTitle: meetingTitle,
+    streaming,
   };
 })(NavBarContainer);

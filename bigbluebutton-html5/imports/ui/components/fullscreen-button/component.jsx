@@ -26,6 +26,7 @@ const propTypes = {
   elementName: PropTypes.string,
   className: PropTypes.string,
   handleToggleFullScreen: PropTypes.func.isRequired,
+  hidden: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -48,6 +49,7 @@ const FullscreenButtonComponent = ({
   handleToggleFullScreen,
   isIphone,
   isFullscreen,
+  hidden,
 }) => {
   if (isIphone) return null;
 
@@ -72,7 +74,12 @@ const FullscreenButtonComponent = ({
   });
 
   return (
-    <div className={wrapperClassName}>
+    <div
+      className={wrapperClassName}
+      style={{
+        opacity: hidden ? 0 : null
+      }}
+    >
       <Button
         color="default"
         icon={!isFullscreen ? 'fullscreen' : 'exit_fullscreen'}

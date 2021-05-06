@@ -37,6 +37,7 @@
   overflow: hidden;
   width: 100%;
   max-height: 100%;
+  padding: 5px 7px;
 
   &.focused {
     grid-column: 1 / span 2;
@@ -155,6 +156,11 @@
   }
 }
 
+.dropdownStreaming {
+  width: 100%;
+  justify-content: center;
+}
+
 .dropdownFireFox {
   max-width: 100%;
 }
@@ -169,6 +175,17 @@
   color: var(--color-off-white);
   padding: 0 1rem 0 .5rem !important;
   font-size: 80%;
+}
+
+.userNameStreaming {
+  @extend %text-elipsis;
+  position: relative;
+  // Keep the background with 0.5 opacity, but leave the text with 1
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 1px;
+  color: var(--color-off-white);
+  padding: 0 1rem 0 .5rem !important;
+  font-size: 150%;
 }
 
 .noMenu {

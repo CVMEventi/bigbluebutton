@@ -15,5 +15,6 @@ export default withTracker((props) => {
   return {
     voiceUser: VoiceUsers.findOne({ intId: userId },
       { fields: { 'muted': 1, 'listenOnly': 1, 'talking': 1 } }),
+    streaming: Session.get('streaming'),
   };
 })(VideoListItemContainer);

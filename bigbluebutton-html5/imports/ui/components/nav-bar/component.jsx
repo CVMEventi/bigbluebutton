@@ -14,6 +14,7 @@ import TalkingIndicatorContainer from '/imports/ui/components/nav-bar/talking-in
 import ConnectionStatusButton from '/imports/ui/components/connection-status/button/container';
 import ConnectionStatusService from '/imports/ui/components/connection-status/service';
 import SettingsDropdownContainer from './settings-dropdown/container';
+import SlidesCounterContainer from './slides-counter/container';
 
 const intlMessages = defineMessages({
   toggleUserListLabel: {
@@ -121,6 +122,7 @@ class NavBar extends Component {
           <div className={styles.center}>
             <h1 className={styles.presentationTitle}>{presentationTitle}</h1>
 
+            <SlidesCounterContainer />
             <RecordingIndicator
               mountModal={mountModal}
               amIModerator={amIModerator}

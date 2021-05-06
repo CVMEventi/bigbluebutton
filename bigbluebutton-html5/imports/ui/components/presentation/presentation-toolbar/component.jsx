@@ -311,6 +311,7 @@ class PresentationToolbar extends PureComponent {
         }
         {
           <div className={styles.presentationZoomControls}>
+            {/*
             {
               !isMobile
                 ? (
@@ -347,6 +348,7 @@ class PresentationToolbar extends PureComponent {
               hideLabel
               className={cx(styles.fitToWidth, styles.presentationBtn)}
             />
+            */}
             {
               ALLOW_FULLSCREEN
                 ? (

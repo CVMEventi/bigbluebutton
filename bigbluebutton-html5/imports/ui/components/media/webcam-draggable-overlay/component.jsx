@@ -316,7 +316,7 @@ class WebcamDraggable extends PureComponent {
       };
     }
 
-    if (swapLayout || isCameraFullscreen || isMobile) {
+    if (swapLayout || isCameraFullscreen || isMobile || Session.get('streaming') !== '') {
       position = {
         x: 0,
         y: 0,
@@ -359,6 +359,7 @@ class WebcamDraggable extends PureComponent {
       [styles.overlayToBottom]: webcamsPlacement === 'bottom' && !dragging,
       [styles.overlayToLeft]: webcamsPlacement === 'left' && !dragging,
       [styles.dragging]: dragging,
+      [styles.overlayNoTransform]: Session.get('streaming') !== '',
     });
 
     const dropZoneTopClassName = cx({
@@ -416,6 +417,11 @@ class WebcamDraggable extends PureComponent {
     } else {
       sizeWidth = webcamsAreaSize.width;
       sizeHeight = webcamsAreaSize.height;
+    }
+
+    if (Session.get('streaming') && Session.get('streaming') !== 'record') {
+      sizeHeight = '100%';
+      sizeWidth = '100%';
     }
 
     return (
@@ -491,6 +497,7 @@ class WebcamDraggable extends PureComponent {
               marginRight: 0,
               zIndex: 2,
               display: hideWebcams ? 'none' : undefined,
+              transform: Session.get('streaming') !== '' ? 'none' : undefined,
             }}
           >
             {

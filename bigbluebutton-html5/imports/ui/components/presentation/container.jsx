@@ -11,6 +11,7 @@ import Auth from '/imports/ui/services/auth';
 import Meetings from '/imports/api/meetings';
 import getFromUserSettings from '/imports/ui/services/users-settings';
 import WhiteboardService from '/imports/ui/components/whiteboard/service';
+import { Session } from 'meteor/session';
 
 const ROLE_VIEWER = Meteor.settings.public.user.role_viewer;
 
@@ -108,5 +109,6 @@ export default withTracker(({ podId }) => {
       'bbb_force_restore_presentation_on_new_events',
       Meteor.settings.public.presentation.restoreOnUpdate,
     ),
+    streaming: Session.get('streaming'),
   };
 })(PresentationAreaContainer);

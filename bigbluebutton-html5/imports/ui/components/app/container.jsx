@@ -124,6 +124,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     randomlySelectedUser,
     currentUserId: currentUser.userId,
     isPresenter: currentUser.presenter,
+    streaming: Session.get('streaming'),
   };
 })(AppContainer)));
 

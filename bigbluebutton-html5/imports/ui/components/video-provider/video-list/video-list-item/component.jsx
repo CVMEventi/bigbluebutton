@@ -152,7 +152,7 @@ class VideoListItem extends Component {
   }
 
   renderFullscreenButton() {
-    const { name } = this.props;
+    const { name, streaming } = this.props;
     const { isFullscreen } = this.state;
 
     if (!ALLOW_FULLSCREEN) return null;
@@ -164,6 +164,7 @@ class VideoListItem extends Component {
         elementName={name}
         isFullscreen={isFullscreen}
         dark
+        hidden={streaming !== ''}
       />
     );
   }
@@ -182,6 +183,7 @@ class VideoListItem extends Component {
       webcamDraggableState,
       swapLayout,
       mirrored,
+      streaming,
     } = this.props;
     const availableActions = this.getAvailableActions();
     const enableVideoMenu = Meteor.settings.public.kurento.enableVideoMenu || false;
@@ -241,8 +243,20 @@ class VideoListItem extends Component {
           <div className={styles.info}>
             {enableVideoMenu && availableActions.length >= 3
               ? (
-                <Dropdown tethered={isTethered} placement="right bottom" className={isFirefox ? styles.dropdownFireFox : styles.dropdown}>
-                  <DropdownTrigger className={styles.dropdownTrigger}>
+                <Dropdown
+                  tethered={isTethered}
+                  placement="right bottom" className={cx({
+                    [styles.dropdownFirefox]: isFirefox,
+                    [styles.dropdown]: !isFirefox,
+                    [styles.dropdownStreaming]: streaming !== '',
+                  })}
+                >
+                  <DropdownTrigger
+                    className={cx({
+                      [styles.dropdownTrigger]: streaming === '',
+                      [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly', 'record'].includes(streaming),
+                    })}
+                  >
                     <span>{name}</span>
                   </DropdownTrigger>
                   <DropdownContent placement="top left" className={styles.dropdownContent}>
@@ -253,11 +267,15 @@ class VideoListItem extends Component {
                 </Dropdown>
               )
               : (
-                <div className={isFirefox ? styles.dropdownFireFox
-                  : styles.dropdown}
+                <div className={cx({
+                  [styles.dropdownFirefox]: isFirefox,
+                  [styles.dropdown]: !isFirefox,
+                  [styles.dropdownStreaming]: streaming !== '',
+                })}
                 >
                   <span className={cx({
-                    [styles.userName]: true,
+                    [styles.userName]: streaming === '',
+                    [styles.userNameStreaming]: ['chromaKey', 'webcamsOnly', 'record'].includes(streaming),
                     [styles.noMenu]: numOfStreams < 3,
                   })}
                   >
@@ -266,9 +284,9 @@ class VideoListItem extends Component {
                 </div>
               )
           }
-            {voiceUser.muted && !voiceUser.listenOnly ? <Icon className={styles.muted} iconName="unmute_filled" /> : null}
-            {voiceUser.listenOnly ? <Icon className={styles.voice} iconName="listen" /> : null}
-            {voiceUser.joined && !voiceUser.muted ? <Icon className={styles.voice} iconName="unmute" /> : null}
+            {streaming === '' && voiceUser.muted && !voiceUser.listenOnly ? <Icon className={styles.muted} iconName="unmute_filled" /> : null}
+            {streaming === '' && voiceUser.listenOnly ? <Icon className={styles.voice} iconName="listen" /> : null}
+            {streaming === '' && voiceUser.joined && !voiceUser.muted ? <Icon className={styles.voice} iconName="unmute" /> : null}
           </div>
           )
         }
