@@ -398,7 +398,7 @@ class App extends Component {
         {this.renderUserInformation()}
         <BannerBarContainer />
         <NotificationsBarContainer />
-        <section className={styles.wrapper}>
+        <section id="wrapper" className={styles.wrapper}>
           <div className={openPanel ? styles.content : styles.noPanelContent}>
             {this.renderNavBar()}
             {this.renderMedia()}

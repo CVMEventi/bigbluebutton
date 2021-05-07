@@ -25,7 +25,7 @@ export default class BrandingBanner extends React.Component {
     const { url } = this.state;
     if (url) {
       return (
-        <div className={styles.bannerContainer}>
+        <div  className={styles.bannerContainer}>
           <img className={styles.bannerImage} src={url} alt="Branding Banner" />
         </div>
       );

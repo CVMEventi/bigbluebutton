@@ -4,10 +4,13 @@ import { Session } from 'meteor/session';
 import { withLayoutConsumer } from '/imports/ui/components/layout/context';
 import { isVideoBroadcasting } from '/imports/ui/components/screenshare/service';
 import deviceInfo from '/imports/utils/deviceInfo';
-import _ from 'lodash';
+import _, { wrap } from 'lodash';
 
 const windowWidth = () => window.innerWidth;
-const windowHeight = () => window.innerHeight;
+const windowHeight = () => {
+  const wrapper = document.getElementById('wrapper')
+  return wrapper !== null ? wrapper.offsetHeight : 0;
+};
 const min = (value1, value2) => (value1 <= value2 ? value1 : value2);
 const max = (value1, value2) => (value1 >= value2 ? value1 : value2);
 

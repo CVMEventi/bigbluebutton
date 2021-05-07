@@ -381,7 +381,7 @@ class PresentationUploader extends Component {
       const currentIndex = updatedPresentations.findIndex((p) => p.isCurrent);
       const actualCurrentIndex = updatedPresentations.findIndex((p) => p.id === oldCurrentId);
 
-      if (currentIndex === -1 && updatedPresentations.length > 0) {
+      /*if (currentIndex === -1 && updatedPresentations.length > 0) {
         const commands = {};
         const newCurrentIndex = actualCurrentIndex === -1 ? 0 : actualCurrentIndex;
         commands[newCurrentIndex] = {
@@ -394,7 +394,7 @@ class PresentationUploader extends Component {
 
         const updatedCurrent = update(updatedPresentations, commands);
         this.setState({ presentations: updatedCurrent });
-      }
+      }*/
     });
   }
 
