@@ -410,7 +410,9 @@ const BaseContainer = withTracker(() => {
     }
   }
 
-  Session.set('streaming', '');
+  if (Session.get('streaming') === undefined) {
+    Session.set('streaming', '');
+  }
 
   const codeError = Session.get('codeError');
   const { streams: usersVideo } = VideoService.getVideoStreams();

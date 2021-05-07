@@ -135,7 +135,7 @@ class VideoList extends Component {
 
   setOptimalGrid() {
     const { streams, webcamDraggableDispatch } = this.props;
-    let numItems = streams.length;
+    let numItems = streams.filter(item => !this.cameraIsHidden(item.userId)).length;
     if (numItems < 1 || !this.canvas || !this.grid) {
       return;
     }
@@ -322,7 +322,7 @@ class VideoList extends Component {
     } = this.props;
     const { focusedId } = this.state;
 
-    const numOfStreams = streams.length;
+    const numOfStreams = streams.filter(item => !this.cameraIsHidden(item.userId)).length;
     return streams
       .filter(item => !this.cameraIsHidden(item.userId))
       .map((vs) => {
