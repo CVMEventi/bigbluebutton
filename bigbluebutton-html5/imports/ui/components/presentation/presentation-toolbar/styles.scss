@@ -115,13 +115,25 @@
   border-right: 0 !important;
 }
 
+.prevSlide {
+  background: red !important;
+  padding: 5px 4px 5px 8px !important;
+}
+
+.skipSlide {
+  background: green !important;
+  padding: 5px 2px 5px 10px !important;
+}
+
 .fitToWidth,
 .skipSlide,
 .prevSlide {
   border: none !important;
+  border-radius: 5px;
 
   i {
     font-size: 1rem;
+    color: white !important;
 
     [dir="rtl"] & {
       -webkit-transform: scale(-1, 1);
