@@ -52,6 +52,21 @@ export const sortLocalPresenterAlphabetical = (s1, s2) => {
     || UserListService.sortUsersByName(s1, s2);
 };
 
+export const sortModerator = (s1, s2) => {
+  if (UserListService.isUserModerator(s1.userId)) {
+    return -1;
+  } else if (UserListService.isUserModerator(s2.userId)) {
+    return 1;
+  } else return 0;
+}
+
+export const sortModeratorPresenterVoiceActivity = (s1, s2) => {
+  return sortModerator(s1, s2)
+    || sortPresenter(s1, s2)
+    || sortVoiceActivity(s1, s2)
+    || UserListService.sortUsersByName(s1, s2);
+}
+
 // SORTING_METHODS: registrar of configurable video stream sorting modes
 // Keys are the method name (String) which are to be configured in settings.yml
 // ${streamSortingMethod} flag.
@@ -106,7 +121,13 @@ const SORTING_METHODS = Object.freeze({
       userId: 1, stream: 1, name: 1,
     },
     localFirst: true,
-  }
+  },
+  MODERATOR_PRESENTER_VOICE_ACTIVITY: {
+    sortingMethod: sortModeratorPresenterVoiceActivity,
+    neededDataTypes: {
+      userId: 1, stream: 1, name: 1, role: 1, presenter: 1, lastFloorTime: 1, floor: 1,
+    },
+  },
 });
 
 export const getSortingMethod = (identifier) => {

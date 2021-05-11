@@ -563,6 +563,12 @@ const isUserPresenter = (userId) => {
   return user ? user.presenter : false;
 };
 
+const isUserModerator = (userId) => {
+  const user = Users.findOne({ userId },
+    { fields: { role: 1 } });
+  return user ? user.role === ROLE_MODERATOR : false;
+};
+
 const amIPresenter = () => {
   return isUserPresenter(Auth.userID);
 };
@@ -636,6 +642,7 @@ export default {
   requestUserInformation,
   focusFirstDropDownItem,
   isUserPresenter,
+  isUserModerator,
   amIPresenter,
   getUsersProp,
   getUserCount,
