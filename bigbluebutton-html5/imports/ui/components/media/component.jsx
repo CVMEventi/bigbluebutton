@@ -70,7 +70,6 @@ export default class Media extends Component {
     });
     const { viewParticipantsWebcams } = Settings.dataSaving;
     const showVideo = usersVideo.length > 0 && viewParticipantsWebcams && isMeteorConnected;
-    const fullHeight = !showVideo || (webcamsPlacement === 'floating');
 
     let maxPresentationHeight = '100%';
     let maxPresentationWidth = '100%';
